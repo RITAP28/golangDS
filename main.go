@@ -17,22 +17,17 @@ func main() {
 	ll := datastructures.LinkedList{};
 
 	ll.InsertAtBeginning(1);
-	ll.DisplayLinkedList();
-
 	ll.InsertAtBeginning(2);
-	ll.DisplayLinkedList();
-
 	ll.InsertAtBeginning(3);
-	ll.DisplayLinkedList();
-
 	ll.InsertAtBeginning(4);
-	ll.DisplayLinkedList();
-
 	ll.InsertAtEnding(100);
-	ll.DisplayLinkedList();
-
 	ll.InsertAtEnding(200);
 	ll.DisplayLinkedList();
+
+	dll := datastructures.DoublyLinkedList{};
+	dll.InsertAtBeginning(1);
+	dll.InsertAtBeginning(2);
+	dll.ForwardTraversing();
 }
 
 func getNames() (string, string) {

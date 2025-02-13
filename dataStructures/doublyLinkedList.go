@@ -2,52 +2,40 @@ package datastructures
 
 import "fmt"
 
-// Node represents a node in a linked list
-type Node struct {
+type doubleNode struct {
 	value int
-	next *Node
+	next *doubleNode
+	prev *doubleNode
 }
 
-type LinkedList struct {
-	head *Node
-	tail *Node
+type DoublyLinkedList struct {
+	head *doubleNode
+	tail *doubleNode
 }
 
-func (ll *LinkedList) InsertAtBeginning(data int) {
-	newNode := &Node{value: data};
-	if ll.head == nil {
-		ll.head = newNode;
-		ll.tail = newNode;
+// inserting the node at the beginning of the list
+func (dll *DoublyLinkedList) InsertAtBeginning(data int) {
+	newNode := &doubleNode{value: data};
+	if dll.head == nil {
+		dll.head = newNode;
+		dll.tail = newNode;
 		return;
 	}
-	newNode.next = ll.head;
-	ll.head = newNode;
+	newNode.next = dll.head;
+	dll.head.prev = newNode;
+	dll.head = newNode;
 }
 
-func (ll *LinkedList) InsertAtEnding(data int) {
-	newNode := &Node{value: data};
-	if ll.head == nil {
-		ll.tail = newNode;
-		ll.head = newNode;
-		return;
+// forward traversing through the list
+func (dll *DoublyLinkedList) ForwardTraversing() {
+	temp := dll.head;
+	fmt.Println("started forward traversing the dll");
+	for ; temp != nil; {
+		fmt.Printf("%d --> ", temp.value);
+		temp = temp.next;
 	}
-
-	ll.tail.next = newNode;
-	ll.tail = newNode;
-}
-
-func (ll *LinkedList) DisplayLinkedList() {
-	if ll.head == nil {
-		fmt.Println("The linked list is empty");
-		return;
-	};
-	current := ll.head;
-	fmt.Println("traversing through the linked list: ")
-	for ; current != nil; {
-		fmt.Printf("%d --> ", current.value);
-		current = current.next;
-	};
 	fmt.Print("nil");
 	fmt.Println();
-	fmt.Println("completed traversing the linked list");
+	fmt.Println("completed forward traversing the dll");
 }
+
