@@ -62,5 +62,26 @@ func (hTable *HashMap) GetFunction(key string) string {
 		}
 	}
 
+	// in case there is no node for the required key
+	// empty string as value is returned
 	return ""
+}
+
+func (hTable *HashMap) DeleteFunction(key string) {
+	index := hTable.hashFunction(key);
+	temp := hTable.buckets[index];
+	var prev *hNode
+
+	for temp != nil {
+		if temp.key == key {
+			if prev != nil {
+				prev.next = temp.next
+			} else {
+				hTable.buckets[index] = temp.next
+			}
+			return
+		}
+		prev = temp
+		temp = temp.next
+	}
 }
