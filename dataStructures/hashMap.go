@@ -1,5 +1,7 @@
 package datastructures
 
+import "fmt"
+
 type hNode struct {
 	key   string
 	value string
@@ -83,5 +85,18 @@ func (hTable *HashMap) DeleteFunction(key string) {
 		}
 		prev = temp
 		temp = temp.next
+	}
+}
+
+func (hTable *HashMap) Display() {
+	index := 0;
+	for ; index < hTable.size; index++ {
+		temp := hTable.buckets[index];
+        fmt.Printf("Bucket %d: ", index);
+        for temp != nil {
+            fmt.Printf("(%s, %s) -> ", temp.key, temp.value);
+            temp = temp.next
+        }
+        fmt.Print("nil\n");
 	}
 }
