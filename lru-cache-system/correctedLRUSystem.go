@@ -1,6 +1,8 @@
 package lrucachesystem
 
-import "errors"
+import (
+	"sync"
+)
 
 type lruNodeSec struct {
 	key   string
@@ -15,9 +17,11 @@ type lruHashMapSec struct {
 	size     int
 	head     *lruNodeSec
 	tail     *lruNodeSec
+	mu       sync.Mutex // Prevents race conditions
 }
 
-func newLruCacheSystem(capacity int) *lruHashMapSec {
+// contructor function
+func NewLruCacheSystem(capacity int) *lruHashMapSec {
 	if capacity <= 0 {
 		panic("Capacity must be greater than 0")
 	}
@@ -31,7 +35,10 @@ func newLruCacheSystem(capacity int) *lruHashMapSec {
 	}
 }
 
-func (h *lruHashMapSec) putFunction(key, value string) {
+func (h *lruHashMapSec) PutFunction(key, value string) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	// checking if the node already exists or nor
 	if node, exists := h.cache[key]; exists {
 		// Key exists --> move to front
@@ -53,12 +60,15 @@ func (h *lruHashMapSec) putFunction(key, value string) {
 	h.size++
 }
 
-func (h *lruHashMapSec) getFunction(key string) (string, error) {
+func (h *lruHashMapSec) GetFunction(key string) (string, bool) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	if node, exists := h.cache[key]; exists {
 		h.moveToFront(node)
-		return node.value, nil
+		return node.value, true
 	} else {
-		return "", errors.New("node specified for the GET operation does not exist")
+		return "", false
 	}
 }
 
